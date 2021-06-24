@@ -103,15 +103,13 @@ module.exports.getAccessToken = async (event) => {
     });
 };
 
-module.exports.getCalenderEvents = async (event) => {
-  const oAuth2Client = new google.auth.OAuth2(
-    client_id,
-    client_secret,
-    redirect_uris[0]
-  );
+module.exports.getCalendarEvents = async (event) => {
+  const oAuth2Client = new OAuth2(client_id, client_secret, redirect_uris[0]);
+
   const access_token = decodeURIComponent(
     `${event.pathParameters.access_token}`
   );
+
   oAuth2Client.setCredentials({ access_token });
 
   return new Promise((resolve, reject) => {
@@ -133,14 +131,15 @@ module.exports.getCalenderEvents = async (event) => {
     );
   })
     .then((results) => {
-      // Respond with OAuth token
       return {
         statusCode: 200,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+        },
         body: JSON.stringify({ events: results.data.items }),
       };
     })
     .catch((err) => {
-      // Handle error
       console.error(err);
       return {
         statusCode: 500,

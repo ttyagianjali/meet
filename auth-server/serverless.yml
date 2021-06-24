@@ -17,6 +17,7 @@ functions:
       - http:
           path: api/get-auth-url
           method: get
+          
   getAccessToken:
     handler: handler.getAccessToken
     events:
@@ -24,9 +25,9 @@ functions:
           path: api/token/{code}
           method: get
 
-  getCalenderEvents:
-    handler: handler.getClaenderEvents
+  getCalendarEvents:
+    handler: handler.getCalendarEvents
     events:
       - http:
-        path: api/get-events/{access_token}
-        method: get
+          path: api/get-events/{access_token}
+          method: get
