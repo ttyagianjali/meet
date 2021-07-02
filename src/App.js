@@ -5,6 +5,7 @@ import CitySearch from "./CitySearch";
 import NumberOfEvents from "./NumberOfEvents";
 import { getEvents } from "./api";
 import { extractLocations } from "./api";
+import { extractEventCount } from "./api";
 import "./nprogress.css";
 
 class App extends Component {
@@ -32,9 +33,21 @@ class App extends Component {
     });
   };
 
+  updateEventsCount = (eventCount) => {
+    getEvents().then((events) => {
+      const eventCountEvents = events.filter(
+        (event) => event.eventCount === eventCount
+      );
+      this.setState({
+        events: eventCountEvents,
+      });
+    });
+  };
+
   state = {
     events: [],
     locations: [],
+    eventsPerPage: [],
   };
   render() {
     return (
@@ -42,10 +55,14 @@ class App extends Component {
         <CitySearch
           locations={this.state.locations}
           updateEvents={this.updateEvents}
+          numberOfEvents={this.state.numberOfEvents}
         />
 
         <EventList events={this.state.events} />
-        <NumberOfEvents />
+        <NumberOfEvents
+          eventsPerPage={this.state.eventsPerPage}
+          updateEventsCount={this.updateEventsCount}
+        />
       </div>
     );
   }

@@ -3,8 +3,10 @@ import { shallow, mount } from "enzyme";
 import App from "../App";
 import EventList from "../EventList";
 import CitySearch from "../CitySearch";
+import NumberOfEvents from "../NumberOfEvents";
 import { mockData } from "../mock-data";
-import { extractLocations, getEvents } from "../api";
+import { extractLocations, extractEventCount, getEvents } from "../api";
+
 
 describe("<App /> component", () => {
   let AppWrapper;
@@ -63,6 +65,33 @@ describe("<App /> integration", () => {
     await suggestionItems.at(suggestionItems.length - 1).simulate("click");
     const allEvents = await getEvents();
     expect(AppWrapper.state("events")).toEqual(allEvents);
+    AppWrapper.unmount();
+  });
+
+  test('App passes "eventsPerPage" state as a prop to NumberOfEvents', () => {
+    const AppWrapper = mount(<App />);
+    const AppNUmbState = AppWrapper.state("eventsPerPage");
+    expect(AppNUmbState).not.toEqual(undefined);
+    expect(AppWrapper.find(NumberOfEvents).props().eventsPerPage).toEqual(
+      AppNUmbState
+    );
+    AppWrapper.unmount();
+  });
+
+  test("get eventCount matching the city selected by the user", async () => {
+    const AppWrapper = mount(<App />);
+    const NumberOfEventsWrapper = AppWrapper.find(NumberOfEvents);
+    const eventCount = extractEventCount(mockData);
+    NumberOfEventsWrapper.setState({ suggestions: eventCount });
+    const suggestions = NumberOfEventsWrapper.state("suggestions");
+    const selectedIndex = Math.floor(Math.random() * suggestions.length);
+    const selectedCity = suggestions[selectedIndex];
+    await NumberOfEventsWrapper.instance().handleItemClicked(selectedCity);
+    const allEvents = await getEvents();
+    const eventsToShow = allEvents.filter(
+      (event) => event.eventCount === selectedCity
+    );
+    expect(AppWrapper.state("events")).toEqual(eventsToShow);
     AppWrapper.unmount();
   });
 });

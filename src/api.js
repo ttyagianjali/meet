@@ -1,6 +1,7 @@
 import { mockData } from ".//mock-data";
 import axios from "axios";
 import NProgress from 'nprogress';
+import "./nprogress.css";
 /**
  *
  * @param {*} events:
@@ -15,6 +16,13 @@ export const extractLocations = (events) => {
   var locations = [...new Set(extractLocations)];
   return locations;
 };
+
+export const extractEventCount = (events) => {
+  var extractEventCount = events.map((event) => event.eventCount);
+  var eventCount = [...new Set(extractEventCount)];
+  return eventCount;
+};
+
 
 const checkToken = async (accessToken) => {
   const result = await fetch(

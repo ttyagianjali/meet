@@ -1,31 +1,42 @@
-import React, { useState } from "react";
+import React, { Component } from "react";
 
-function NumberofEvents(props) {
-  const [eventsToShow, setEventsToShow] = useState(props.eventsToShow);
 
-  const handleChange = (event) => {
-    if (event.target.value === "") {
-      setEventsToShow(event.target.value);
-      props.updateEventNum("NoNum");
-    } else {
-      setEventsToShow(event.target.value);
-      props.updateEventNum(event.target.value);
-    }
+class NumberOfEvents extends Component {
+  state = {
+    numberOfEvents: 32,
   };
 
-  return (
-    <div className="numberOfEvents">
-      <label>Events per page: </label>
-      <input
-        type="number"
-        id="number"
-        className="numberInput"
-        value={eventsToShow}
-        placeholder="#"
-        onChange={handleChange}
-      />
-    </div>
-  );
-}
+  handleInputChanged = (event) => {
+    const value = event.target.value;
+    this.setState({
+      numberOfEvents: value,
+    });
+    this.props.updateNumberOfEvents(event.target.value);
+  };
 
-export default NumberofEvents;
+  handleItemClicked = (suggestion) => {
+    this.setState({
+      query: suggestion,
+    });
+
+    this.props.updateEventsCount(suggestion);
+  };
+
+  render() {
+    const numberOfEvents = this.state.numberOfEvents;
+    return (
+      <div className="numberOfEvents">
+        <form>
+          <label> Number of Events:</label>
+          <input
+            type="text"
+            className="EventsNumber"
+            value={numberOfEvents}
+            onChange={(e) => this.handleInputChanged(e)}
+          />
+        </form>
+      </div>
+    );
+  }
+}
+export default NumberOfEvents;
