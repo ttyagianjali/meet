@@ -187,7 +187,7 @@ const getAccessToken = async () => {
     const code = await searchParams.get("code");
     if (!code) {
       const results = await axios.get(
-        "https://hd58hdacgj.execute-api.eu-central-1.amazonaws.com/dev/api/get-auth-url"
+        "https://raro370h4k.execute-api.eu-central-1.amazonaws.com/dev/api/get-auth-url"
       );
       const { authUrl } = results.data;
       return (window.location.href = authUrl);
