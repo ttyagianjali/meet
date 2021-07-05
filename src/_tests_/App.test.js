@@ -67,31 +67,4 @@ describe("<App /> integration", () => {
     expect(AppWrapper.state("events")).toEqual(allEvents);
     AppWrapper.unmount();
   });
-
-  // test('App passes "eventsPerPage" state as a prop to NumberOfEvents', () => {
-  //   const AppWrapper = mount(<App />);
-  //   const AppNUmbState = AppWrapper.state("eventsPerPage");
-  //   expect(AppNUmbState).not.toEqual(undefined);
-  //   expect(AppWrapper.find(NumberOfEvents).props().eventsPerPage).toEqual(
-  //     AppNUmbState
-  //   );
-  //   AppWrapper.unmount();
-  // });
-
-  // test("get eventCount matching the city selected by the user", async () => {
-  //   const AppWrapper = mount(<App />);
-  //   const NumberOfEventsWrapper = AppWrapper.find(NumberOfEvents);
-  //   const eventCount = extractEventCount(mockData);
-  //   NumberOfEventsWrapper.setState({ suggestions: eventCount });
-  //   const suggestions = NumberOfEventsWrapper.state("suggestions");
-  //   const selectedIndex = Math.floor(Math.random() * suggestions.length);
-  //   const selectedCity = suggestions[selectedIndex];
-  //   await NumberOfEventsWrapper.instance().handleItemClicked(selectedCity);
-  //   const allEvents = await getEvents();
-  //   const eventsToShow = allEvents.filter(
-  //     (event) => event.eventCount === selectedCity
-  //   );
-  //   expect(AppWrapper.state("events")).toEqual(eventsToShow);
-  //   AppWrapper.unmount();
-  // });
 });
