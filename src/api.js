@@ -105,4 +105,3 @@ const getToken = async (code) => {
 };
 
 export { getEvents, getAccessToken, extractLocations, getToken, checkToken };
-
