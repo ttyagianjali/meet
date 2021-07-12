@@ -30,7 +30,7 @@ class App extends Component {
     });
   };
 
-  //I this function will update tbe number of events of app.state fom <NumberOfEvents>
+  //In this function will update tbe number of events of app.state fom <NumberOfEvents>
   updateNumberOfEvents(eventNumber) {
     this.setState({ numberOfEvents: eventNumber });
     const { currentCity } = this.state;
@@ -61,17 +61,17 @@ class App extends Component {
     this.mounted = false;
   }
 
-  getData() {
-    const { locations, events } = this.state;
-    const data = locations.map((location) => {
-      const number = events.filter(
-        (event) => event.location === location
-      ).length;
-      const city = location.split(", ").shift(); //split the location at the occurrence of ", " and return an array- .shift() array function to get the first element in the array
-      return { city, number };
-    });
-    return data;
-  }
+  // getData() {
+  //   const { locations, events } = this.state;
+  //   const data = locations.map((location) => {
+  //     const number = events.filter(
+  //       (event) => event.location === location
+  //     ).length;
+  //     const city = location.split(", ").shift(); //split the location at the occurrence of ", " and return an array- .shift() array function to get the first element in the array
+  //     return { city, number };
+  //   });
+  //   return data;
+  // }
 
   render() {
     return (
