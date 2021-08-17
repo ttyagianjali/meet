@@ -1,41 +1,60 @@
 import React, { Component } from "react";
-import "./style.css";
-
-import { mockData } from "./mock-data";
 
 class Event extends Component {
   state = {
-    show: false,
+    showMore: false,
   };
 
-  handleButton = () => {
-    this.setState((prevState) => ({ show: !prevState.show }));
-  };
+  showMore() {
+    if (this.state.showMore === false) {
+      this.setState({ showMore: true });
+    } else {
+      this.setState({ showMore: false });
+    }
+  }
+
+  showText() {
+    if (this.state.showMore === false) {
+      return "Show More";
+    } else {
+      return "Show Less";
+    }
+  }
+
+  desc(event) {
+    if (this.state.showMore === false) {
+      return "";
+    } else {
+      return event.description;
+    }
+  }
 
   render() {
-    let event = this.props.event;
-
+    const { event } = this.props;
     return (
-      <div className="Event">
-        <h1 className="EventSummary">{event.summary}</h1>
-        <h2 className="EventLocation">{event.location}</h2>
-        <h3 className="EventDate">
-          start: {event.start.dateTime} - Time Zone: {event.start.timeZone}
-        </h3>
-        {this.state.show === true && (
-          <p className="EventDetails">{event.description}</p>
-        )}
-        {this.state.show === false && (
-          <button className="showMore" onClick={() => this.handleButton()}>
-            Show details
+      <>
+        <div className="event">
+          <h2>{event.summary}</h2>
+          <p>
+            <b>Creator:</b> {event.creator.email}
+          </p>
+          <p>
+            <b>Start Time:</b> {event.start.dateTime}
+          </p>
+          <p>
+            <b>Location:</b> {event.location}
+          </p>
+          <p className="description">{this.desc(event)}</p>
+          <button
+            className="details-btn"
+            onClick={() => {
+              this.showMore(event);
+            }}
+          >
+            {this.showText()}
           </button>
-        )}
-        {this.state.show === true && (
-          <button className="showLess" onClick={() => this.handleButton()}>
-            hide details
-          </button>
-        )}
-      </div>
+        </div>
+      </>
     );
   }
 }

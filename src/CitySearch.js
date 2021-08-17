@@ -1,7 +1,4 @@
 import React, { Component } from "react";
-//import { mockData } from "./mock-data";
-//import { extractLocations } from "./api";
-import "./style.css";
 
 class CitySearch extends Component {
   state = {
@@ -26,7 +23,8 @@ class CitySearch extends Component {
       query: suggestion,
       showSuggestions: false,
     });
-    this.props.updateEvents(suggestion, this.props.numberOfEvents);
+
+    this.props.updateEvents(suggestion);
   };
 
   render() {
@@ -47,18 +45,13 @@ class CitySearch extends Component {
         >
           {this.state.suggestions.map((suggestion) => (
             <li
-              className="matchSuggestions"
               key={suggestion}
               onClick={() => this.handleItemClicked(suggestion)}
             >
               {suggestion}
             </li>
           ))}
-          <li
-            className="seeAll"
-            key="all"
-            onClick={() => this.handleItemClicked("all")}
-          >
+          <li onClick={() => this.handleItemClicked("all")}>
             <b>See all cities</b>
           </li>
         </ul>
@@ -66,4 +59,5 @@ class CitySearch extends Component {
     );
   }
 }
+
 export default CitySearch;
