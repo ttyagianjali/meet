@@ -1,10 +1,12 @@
-import "./nprogress.css";
 import React, { Component } from "react";
 import "./App.css";
 import EventList from "./EventList";
 import NumberOfEvents from "./NumberOfEvents";
 import CitySearch from "./CitySearch";
-import { getEvents, extractLocations } from "./api";
+import { getEvents } from "./api";
+// import { mockData } from "./mock-data";
+import { extractLocations } from "./api";
+import "./style.css";
 
 class App extends Component {
   state = {
@@ -24,6 +26,7 @@ class App extends Component {
         this.setState({
           events: locationEvents.slice(0, numberOfEvents),
           currentCity: location,
+          //locations: [location],
         });
       }
     });
@@ -36,22 +39,17 @@ class App extends Component {
     this.updateEvents(currentCity, eventNumber);
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     const { numberOfEvents } = this.state;
     this.mounted = true;
-    const searchParams = new URLSearchParams(window.location.search);
-    const code = searchParams.get("code");
-    this.setState({ showWelcomeScreen: !code });
-    if (code && this.mounted) {
-      getEvents().then((events) => {
-        if (this.mounted) {
-          this.setState({
-            events: events.slice(0, numberOfEvents),
-            locations: extractLocations(events),
-          });
-        }
-      });
-    }
+    getEvents().then((events) => {
+      if (this.mounted) {
+        this.setState({
+          events: events.slice(0, numberOfEvents),
+          locations: extractLocations(events),
+        });
+      }
+    });
   }
 
   componentWillUnmount() {
@@ -61,21 +59,16 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        <NumberOfEvents
+          updateNumberOfEvents={(e) => this.updateNumberOfEvents(e)}
+        />
         <CitySearch
           locations={this.state.locations}
           updateEvents={this.updateEvents}
           numberOfEvents={this.state.numberOfEvents}
         />
-
-        <NumberOfEvents
-          updateNumberOfEvents={(e) => this.updateNumberOfEvents(e)}
-        />
-
         <EventList events={this.state.events} />
       </div>
     );
   }
 }
-
-export default App;
-

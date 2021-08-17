@@ -1,37 +1,60 @@
 import React from "react";
 import { shallow } from "enzyme";
 import Event from "../Event";
-import EventList from "../EventList";
 import { mockData } from "../mock-data";
 
-describe("<EventList /> component", () => {
-  let createdEvent;
+describe("<Event /> component", () => {
+  let EventWrapper;
   beforeAll(() => {
-    createdEvent = shallow(<Event event={mockData[0]} />);
+    EventWrapper = shallow(<Event event={mockData[1]} />);
   });
 
-  test("render event list", () => {
-    const EventListWrapper = shallow(<EventList events={mockData} />);
-    expect(EventListWrapper.find(Event)).toHaveLength(mockData.length);
+  test("Summary is shown", () => {
+    expect(EventWrapper.find(".EventLocation")).toHaveLength(1);
+  });
+  test("Location is shown", () => {
+    expect(EventWrapper.find(".EventLocation")).toHaveLength(1);
   });
 
-  test("render the event show more button", () => {
-    expect(createdEvent.find(".details-btn")).toHaveLength(1);
+  test("Date and timezone are shown", () => {
+    expect(EventWrapper.find(".EventDate")).toHaveLength(1);
   });
 
-  test("show more button should be false on render", () => {
-    expect(createdEvent.state("showMore")).toBe(false);
+  test("Show more button is render", () => {
+    expect(EventWrapper.find(".showMore")).toHaveLength(1);
   });
 
-  test("if showMore is false, simulates a click showing more details", () => {
-    const changeState = createdEvent.state({ showMore: true });
-    createdEvent.find(".details-btn").simulate("click", changeState);
-    expect(createdEvent.state("showMore")).toBe(true);
+  test("change show-state on click", () => {
+    EventWrapper.setState({
+      show: false,
+    });
+    EventWrapper.find(".showMore").simulate("click");
+    expect(EventWrapper.state("show")).toEqual(true);
   });
 
-  test("if showMore is true, simulates a click showing less details", () => {
-    const changeState = createdEvent.state({ showMore: false });
-    createdEvent.find(".details-btn").simulate("click", changeState);
-    expect(createdEvent.state("showMore")).toBe(false);
+  test("hide details by default", () => {
+    EventWrapper.setState({
+      show: false,
+    });
+
+    expect(EventWrapper.find(".EventDetails")).toHaveLength(0);
+  });
+
+  test("show detail on click", () => {
+    EventWrapper.setState({
+      show: false,
+    });
+
+    EventWrapper.find(".showMore").simulate("click");
+    expect(EventWrapper.find(".EventDetails")).toHaveLength(1);
+  });
+
+  test("hide details on click", () => {
+    EventWrapper.setState({
+      show: true,
+    });
+
+    EventWrapper.find(".showLess").simulate("click");
+    expect(EventWrapper.find(".EventDetails")).toHaveLength(0);
   });
 });
