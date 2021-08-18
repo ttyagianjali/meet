@@ -43,7 +43,6 @@ class CitySearch extends Component {
           className="suggestions"
           style={this.state.showSuggestions ? {} : { display: "none" }}
         >
-          
           {this.state.suggestions.map((suggestion) => (
             <li
               key={suggestion}
