@@ -1,11 +1,10 @@
 import React, { Component } from "react";
-import "./App.css";
 import EventList from "./EventList";
 import CitySearch from "./CitySearch";
 import NumberOfEvents from "./NumberOfEvents";
-import { getEvents } from "./api";
-import { extractLocations } from "./api";
+import { extractLocations, getEvents } from "./api";
 import "./nprogress.css";
+import "./App.css";
 
 
 class App extends Component {
@@ -28,13 +27,29 @@ class App extends Component {
     });
   };
 
-  componentDidMount() {
+  //I this function will update tbe number of events of app.state fom <NumberOfEvents>
+  updateNumberOfEvents(eventNumber) {
+    this.setState({ numberOfEvents: eventNumber });
+    const { currentCity } = this.state;
+    this.updateEvents(currentCity, eventNumber);
+  }
+
+  async componentDidMount() {
+    const { numberOfEvents } = this.state;
     this.mounted = true;
-    getEvents().then((events) => {
-      if (this.mounted) {
-        this.setState({ events, locations: extractLocations(events) });
-      }
-    });
+    const searchParams = new URLSearchParams(window.location.search);
+    const code = searchParams.get("code");
+    this.setState({ showWelcomeScreen: !code });
+    if (code && this.mounted) {
+      getEvents().then((events) => {
+        if (this.mounted) {
+          this.setState({
+            events: events.slice(0, numberOfEvents),
+            locations: extractLocations(events),
+          });
+        }
+      });
+    }
   }
 
   componentWillUnmount() {
@@ -44,6 +59,9 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        <NumberOfEvents
+          updateNumberOfEvents={(e) => this.updateNumberOfEvents(e)}
+        />
         <CitySearch
           locations={this.state.locations}
           updateEvents={this.updateEvents}
