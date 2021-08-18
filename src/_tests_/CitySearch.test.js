@@ -8,13 +8,8 @@ describe("<CitySearch /> component", () => {
   let locations, CitySearchWrapper;
   beforeAll(() => {
     locations = extractLocations(mockData);
-    CitySearchWrapper = shallow(
-      <CitySearch locations={locations} updateEvents={() => {}} />
+    CitySearchWrapper = shallow(<CitySearch locations={locations} updateEvents={() => {}} />
     );
-  });
-
-  test("render text input", () => {
-    expect(CitySearchWrapper.find(".city")).toHaveLength(1);
   });
 
   test("renders a list of suggestions", () => {
@@ -89,4 +84,5 @@ describe("<CitySearch /> component", () => {
       display: "none",
     });
   });
+  
 });
