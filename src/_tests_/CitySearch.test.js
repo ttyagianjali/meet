@@ -3,16 +3,21 @@ import { shallow } from "enzyme";
 import CitySearch from "../CitySearch";
 import { mockData } from "../mock-data";
 import { extractLocations } from "../api";
+import { app } from "../App";
 
 describe("<CitySearch /> component", () => {
   let locations, CitySearchWrapper;
   beforeAll(() => {
     locations = extractLocations(mockData);
-    CitySearchWrapper = shallow(<CitySearch locations={locations} updateEvents={() => {}} />
+    CitySearchWrapper = shallow(
+      <CitySearch locations={locations} updateEvents={() => {}} />
     );
   });
+  test("render text input", () => {
+    expect(CitySearchWrapper.find(".city")).toHaveLength(1);
+  });
 
-  test("renders a list of suggestions", () => {
+  test("render list of suggestions", () => {
     expect(CitySearchWrapper.find(".suggestions")).toHaveLength(1);
   });
 
@@ -84,5 +89,4 @@ describe("<CitySearch /> component", () => {
       display: "none",
     });
   });
-  
 });
