@@ -8,6 +8,7 @@ import { mount } from "enzyme";
 import { mockData } from "../mock-data";
 import { extractLocations } from "../api";
 import { getEvents } from "../api";
+import { waitFor } from "@testing-library/react";
 
 
 describe("<App /> component", () => {
@@ -74,4 +75,51 @@ describe("<App /> integration", () => {
     expect(AppWrapper.state("events")).toEqual(allEvents);
     AppWrapper.unmount();
   });
+
+  test("change state when text input changes", () => {
+    const AppWrapper = mount(<App />);
+    const NumberOfEventsWrapper = AppWrapper.find(NumberOfEvents);
+    NumberOfEventsWrapper.setState({
+      numberOfEvents: "32",
+    });
+    const eventObject = { target: { value: "10" } };
+    NumberOfEventsWrapper.find(".EventsNumber").simulate("change", eventObject);
+    expect(NumberOfEventsWrapper.state("numberOfEvents")).toBe("10");
+  });
+
+  test("numberOfEvent state of app is updated after user changes number of events", async () => {
+    const AppWrapper = mount(<App />);
+    AppWrapper.setState({ numberOfEvents: "32" });
+    const eventObject = { target: { value: "10" } };
+
+    const NumberOfEventsComponent = AppWrapper.find(NumberOfEvents);
+    NumberOfEventsComponent.find(".EventsNumber").simulate(
+      "change",
+      eventObject
+    );
+
+    expect(AppWrapper.state("numberOfEvents")).toBe("10");
+
+    AppWrapper.unmount();
+  });
+
+  test("events.length is updated after user changes number of events", async () => {
+    //const runAllPromises = () => new Promise(setImmediate);
+
+    const AppWrapper = mount(<App />);
+
+    AppWrapper.setState({ numberOfEvents: "32", locations: "all" });
+    const eventObject = { target: { value: 1 } };
+
+    const NumberOfEventsComponent = AppWrapper.find(NumberOfEvents);
+    await NumberOfEventsComponent.find(".EventsNumber").simulate(
+      "change",
+      eventObject
+    );
+    await waitFor(() => {
+      AppWrapper.update();
+      expect(AppWrapper.state("events").length).toBe(1);
+    });
+  });
+
 });
