@@ -2,7 +2,7 @@
 .App {
   text-align: center;
   padding: 2% 5%;
-  margin-top: 50px;
+  margin-top: 100px;
   border: 1px solid gray;
   margin-left: 50px;
   margin-right: 50px;
@@ -135,8 +135,8 @@ input[type="number"] {
 }
 
 .Alert {
-  position: fixed;
-  top: 20px;
+  /* position: fixed; */
+  
 }
 
 .data-vis-wrapper {
