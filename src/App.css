@@ -134,11 +134,6 @@ input[type="number"] {
   font-family: sans-serif;
 }
 
-.Alert {
-  /* position: fixed; */
-  
-}
-
 .data-vis-wrapper {
   display: flex;
   align-items: center;
