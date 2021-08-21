@@ -1,8 +1,5 @@
 import React, { Component } from "react";
 import { InfoAlert } from "./Alert";
-//import { mockData } from "./mock-data";
-//import { extractLocations } from "./api";
-
 
 class CitySearch extends Component {
   state = {
