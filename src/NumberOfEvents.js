@@ -4,31 +4,40 @@ import {ErrorAlert} from './Alert';
 class NumberOfEvents extends Component {
   state = {
     numberOfEvents: 32,
+    errorText: "",
   };
 
   handleInputChanged = (event) => {
-    const value = event.target.value;
-    this.setState({
-      errorText: "",
-      numberOfEvents: value,
-    });
-    this.props.updateNumberOfEvents(event.target.value);
+    const number = event.target.value;
+    if (number <= 0 || number > 99) {
+      return this.setState({
+        errorText: "Please enter a number between 0 and 99",
+        numberOfEvents: "",
+      });
+    } else {
+      this.setState({
+        numberOfEvents: number,
+        errorText: "",
+      });
+      this.props.updateNumberOfEvents(event.target.value);
+    }
   };
 
   render() {
-    const numberOfEvents = this.state.numberOfEvents;
     return (
-      <div className="numberOfEvents">
-        <ErrorAlert text={this.props.errorText} />
-        <form>
-          <label> Number of Events:</label>
-          <input
-            type="text"
-            className="EventsNumber"
-            value={numberOfEvents}
-            onChange={(e) => this.handleInputChanged(e)}
-          />
-        </form>
+      <div>
+        <p>Limit search results </p>
+
+        <input
+          type="number"
+          id="numberInput"
+          value={this.state.numberOfEvents}
+          className="numberInput"
+          onChange={(e) => this.handleInputChanged(e)}
+        />
+        <div className="errorText">
+          <ErrorAlert text={this.state.errorText} />
+        </div>
       </div>
     );
   }

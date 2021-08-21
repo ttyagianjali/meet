@@ -2,6 +2,10 @@
 .App {
   text-align: center;
   padding: 2% 5%;
+  margin-top: 50px;
+  border: 1px solid gray;
+  margin-left: 50px;
+  margin-right: 50px;
 }
 
 .App * {
@@ -43,6 +47,8 @@ input[type="number"] {
 .CitySearch {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   flex-basis: 300px;
   max-width: 300px;
   margin: auto;
@@ -80,7 +86,7 @@ input[type="number"] {
   padding: 10px 10px 35px;
   margin-bottom: 10px;
   text-align: left;
-  border: 1px solid #ccc;
+  border: 1px solid black;
   border-radius: 4px;
   position: relative;
 }
