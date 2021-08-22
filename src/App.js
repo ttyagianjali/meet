@@ -4,7 +4,7 @@ import EventList from "./EventList";
 import NumberOfEvents from "./NumberOfEvents";
 import CitySearch from "./CitySearch";
 import { getEvents } from "./api";
-// import { mockData } from "./mock-data";
+import { NetworkAlert } from "./Alert";
 import { extractLocations } from "./api";
 
 
@@ -47,7 +47,14 @@ class App extends Component {
         this.setState({
           events: events.slice(0, numberOfEvents),
           locations: extractLocations(events),
+          
         });
+        if (!navigator.onLine) {
+          this.setState({ networkText: <div className="networkNotification">'Network error, the events you are viewing may be out of date. To make sure you are viewing the latest information, make sure you are connected to the internet'</div> });
+          console.log("offline mode");
+        } else {
+          this.setState({ networkText: '' });
+        }
       }
     });
   }
@@ -57,9 +64,13 @@ class App extends Component {
   }
 
   render() {
+    const { networkText } = this.state;
     return (
       <div className="App">
         <h1>MEET APP</h1>
+        <div>
+          <NetworkAlert text={networkText} />
+        </div>
         <CitySearch
           locations={this.state.locations}
           updateEvents={this.updateEvents}
