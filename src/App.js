@@ -59,6 +59,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        <h1><span>Choose Your Nearest City</span></h1>
         <CitySearch
           locations={this.state.locations}
           updateEvents={this.updateEvents}
