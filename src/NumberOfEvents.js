@@ -26,7 +26,7 @@ class NumberOfEvents extends Component {
   render() {
     return (
       <div>
-        <p>Limit search results </p>
+        <p>Number Of Events</p>
         <input
           type="number"
           id="numberInput"
