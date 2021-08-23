@@ -24,7 +24,7 @@ class Alert extends Component {
 class InfoAlert extends Alert {
   constructor(props) {
     super(props);
-    this.color = "blue";
+    this.color = "black";
   }
 }
 
@@ -39,7 +39,7 @@ class ErrorAlert extends Alert {
 class NetworkAlert extends Alert {
   constructor(props) {
     super(props);
-    this.color = '#f8a01f';
+    this.color = 'black';
   }
 }
 

@@ -66,7 +66,7 @@ class App extends Component {
           <NetworkAlert
             text={
               networkStatus === "Offline"
-                ? "App is running offline: data may not be updated"
+                ? "App is running offline: Turn on internet to get the latest events around you!"
                 : ""
             }
           />
