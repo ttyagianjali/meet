@@ -14,6 +14,7 @@ class App extends Component {
     locations: [],
     numberOfEvents: 32,
     currentCity: "all",
+    networkStatus: navigator.onLine ? "Online" : "Offline",
   };
 
   updateEvents = (location, numberOfEvents) => {
@@ -47,14 +48,7 @@ class App extends Component {
         this.setState({
           events: events.slice(0, numberOfEvents),
           locations: extractLocations(events),
-          
         });
-        if (!navigator.onLine) {
-          this.setState({ networkText: <div className="networkNotification">'Network error, the events you are viewing may be out of date. To make sure you are viewing the latest information, make sure you are connected to the internet'</div> });
-          console.log("offline mode");
-        } else {
-          this.setState({ networkText: '' });
-        }
       }
     });
   }
@@ -64,12 +58,18 @@ class App extends Component {
   }
 
   render() {
-    const { networkText } = this.state;
+    const { networkStatus } = this.state;
     return (
       <div className="App">
         <h1>MEET APP</h1>
         <div>
-          <NetworkAlert text={networkText} />
+          <NetworkAlert
+            text={
+              networkStatus === "Offline"
+                ? "App is running offline: data may not be updated"
+                : ""
+            }
+          />
         </div>
         <CitySearch
           locations={this.state.locations}
