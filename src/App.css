@@ -6,6 +6,7 @@
   border: 1px solid gray;
   margin-left: 50px;
   margin-right: 50px;
+  background-color:rgb(245, 211, 191);
 }
 
 .App * {
@@ -82,17 +83,13 @@ input[type="number"] {
   background-color: #bcdcdb;
 }
 
-.event {
+.Event {
   padding: 10px 10px 35px;
   margin-bottom: 10px;
   text-align: left;
-  border-top: 1px solid black;
-  border-radius: 4px;
+  border: 1px solid black;
   position: relative;
-}
-
-.EventList{
-  border-top: 2px;
+  background-color:rgb(250, 245, 245);
 }
 
 .details-btn {

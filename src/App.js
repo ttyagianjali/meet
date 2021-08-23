@@ -79,7 +79,9 @@ class App extends Component {
         <NumberOfEvents
           updateNumberOfEvents={(e) => this.updateNumberOfEvents(e)}
         />
-        <EventList events={this.state.events} />
+        <div className="eventsBorder">
+          <EventList events={this.state.events} />
+        </div>
       </div>
     );
   }
