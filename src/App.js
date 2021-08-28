@@ -3,17 +3,9 @@ import "./App.css";
 import EventList from "./EventList";
 import NumberOfEvents from "./NumberOfEvents";
 import CitySearch from "./CitySearch";
+import { getEvents } from "./api";
 import { NetworkAlert } from "./Alert";
-import WelcomeScreen from "./WelcomeScreen";
-import { getEvents, extractLocations, checkToken, getAccessToken } from "./api";
-import {
-  ScatterChart,
-  Scatter,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  //Tooltip,
-} from "recharts";
+import { extractLocations } from "./api";
 
 
 class App extends Component {
@@ -22,7 +14,6 @@ class App extends Component {
     locations: [],
     numberOfEvents: 32,
     currentCity: "all",
-    showWelcomeScreen: undefined,
     networkStatus: navigator.onLine ? "Online" : "Offline",
   };
 
@@ -49,41 +40,24 @@ class App extends Component {
     this.updateEvents(currentCity, eventNumber);
   }
 
-  async componentDidMount() {
+  componentDidMount() {
+    const { numberOfEvents } = this.state;
     this.mounted = true;
-    const accessToken = localStorage.getItem("access_token");
-    const isTokenValid = (await checkToken(accessToken)).error ? false : true;
-    const searchParams = new URLSearchParams(window.location.search);
-    const code = searchParams.get("code");
-    this.setState({ showWelcomeScreen: !(code || isTokenValid) });
-    if ((code || isTokenValid) && this.mounted) {
-      getEvents().then((events) => {
-        if (this.mounted) {
-          this.setState({ events, locations: extractLocations(events) });
-        }
-      });
-    }
+    getEvents().then((events) => {
+      if (this.mounted) {
+        this.setState({
+          events: events.slice(0, numberOfEvents),
+          locations: extractLocations(events),
+        });
+      }
+    });
   }
 
   componentWillUnmount() {
     this.mounted = false;
   }
 
-  getData = () => {
-    const { locations, events } = this.state;
-    const data = locations.map((location) => {
-      const number = events.filter(
-        (event) => event.location === location
-      ).length;
-      const city = location.split(", ").shift();
-      return { city, number };
-    });
-    return data;
-  };
-
   render() {
-    if (this.state.showWelcomeScreen === undefined)
-      return <div className="App" />;
     const { networkStatus } = this.state;
     return (
       <div className="App">
@@ -105,26 +79,9 @@ class App extends Component {
         <NumberOfEvents
           updateNumberOfEvents={(e) => this.updateNumberOfEvents(e)}
         />
-        <h4>Events in each city</h4>
-        <ScatterChart
-          width={730}
-          height={250}
-          margin={{ top: 20, right: 20, bottom: 10, left: 10 }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis type="category" dataKey="city" name="city" />
-          <YAxis type="number" dataKey="number" name="number of events" />
-          <Scatter data={this.getData()} fill="#8884d8" />
-        </ScatterChart>
         <div className="eventsBorder">
           <EventList events={this.state.events} />
         </div>
-        <WelcomeScreen
-          showWelcomeScreen={this.state.showWelcomeScreen}
-          getAccessToken={() => {
-            getAccessToken();
-          }}
-        />
       </div>
     );
   }
