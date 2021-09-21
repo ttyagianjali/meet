@@ -4,9 +4,9 @@ import EventList from "./EventList";
 import NumberOfEvents from "./NumberOfEvents";
 import CitySearch from "./CitySearch";
 import EventGenre from "./EventGenre";
-import { getEvents } from "./api";
 import { NetworkAlert } from "./Alert";
-import { extractLocations } from "./api";
+import WelcomeScreen from "./WelcomeScreen";
+import { getEvents, extractLocations, checkToken, getAccessToken } from "./api";
 import {
   ScatterChart,
   Scatter,
@@ -22,6 +22,7 @@ class App extends Component {
   state = {
     events: [],
     locations: [],
+    showWelcomeScreen: undefined,
     numberOfEvents: 32,
     currentCity: "all",
     networkStatus: navigator.onLine ? "Online" : "Offline",
@@ -50,18 +51,22 @@ class App extends Component {
     this.updateEvents(currentCity, eventNumber);
   }
 
-  componentDidMount() {
-    const { numberOfEvents } = this.state;
+  async componentDidMount() {
     this.mounted = true;
-    getEvents().then((events) => {
+      const accessToken = localStorage.getItem('access_token');
+      const isTokenValid = (await checkToken(accessToken)).error ? false :
+      true;
+      const searchParams = new URLSearchParams(window.location.search);
+      const code = searchParams.get("code");
+      this.setState({ showWelcomeScreen: !(code || isTokenValid) });
+      if ((code || isTokenValid) && this.mounted) {
+      getEvents().then((events) => {
       if (this.mounted) {
-        this.setState({
-          events: events.slice(0, numberOfEvents),
-          locations: extractLocations(events),
-        });
+      this.setState({ events, locations: extractLocations(events) });
       }
     });
   }
+}
 
   componentWillUnmount() {
     this.mounted = false;
@@ -80,6 +85,8 @@ class App extends Component {
   };
 
   render() {
+    if (this.state.showWelcomeScreen === undefined)
+      return <div className="App" />;
     const { networkStatus, events } = this.state;
     return (
       <div className="App">
@@ -103,7 +110,7 @@ class App extends Component {
         />
         <div className="data-vis-wrapper">
           <h4>Events in each city</h4>
-          <EventGenre events={events}/>
+          <EventGenre events={events} />
           <ResponsiveContainer height={400}>
             <ScatterChart
               width={800}
@@ -120,6 +127,12 @@ class App extends Component {
         <div className="eventsBorder">
           <EventList events={this.state.events} />
         </div>
+        <WelcomeScreen
+          showWelcomeScreen={this.state.showWelcomeScreen}
+          getAccessToken={() => {
+            getAccessToken();
+          }}
+        />
       </div>
     );
   }
